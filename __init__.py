@@ -280,6 +280,71 @@ def clear_slide(view):
     global slide
     slide = 0
 
+
+def exec_continue(view):
+    try:
+        # Continue command is same for gdb and lldb
+        cmd = 'continue'
+
+        # send it
+        res = client.perform_request("command", command=cmd, block=False)
+        if res.is_error:
+            raise Exception("Failed to delete breakpoint: {}".format(res))
+
+        # update the voltron views
+        res = client.perform_request("command", command="voltron update", block=False)
+    except:
+        log_alert("Failed to execute '%s' command" % cmd)
+
+
+def exec_run(view):
+    try:
+        # Run command is same for gdb and lldb
+        cmd = 'run'
+
+        # send it
+        res = client.perform_request("command", command=cmd, block=False)
+        if res.is_error:
+            raise Exception("Failed to delete breakpoint: {}".format(res))
+
+        # update the voltron views
+        res = client.perform_request("command", command="voltron update", block=False)
+    except:
+        log_alert("Failed to execute '%s' command" % cmd)
+
+
+def exec_step_into(view):
+    try:
+        # Step into command is same for gdb and lldb
+        cmd = 'si'
+
+        # send it
+        res = client.perform_request("command", command=cmd, block=False)
+        if res.is_error:
+            raise Exception("Failed to delete breakpoint: {}".format(res))
+
+        # update the voltron views
+        res = client.perform_request("command", command="voltron update", block=False)
+    except:
+        log_alert("Failed to execute '%s' command" % cmd)
+
+
+def exec_step_over(view):
+    try:
+        # Step over command is same for gdb and lldb
+        cmd = 'ni'
+
+        # send it
+        res = client.perform_request("command", command=cmd, block=False)
+        if res.is_error:
+            raise Exception("Failed to delete breakpoint: {}".format(res))
+
+        # update the voltron views
+        res = client.perform_request("command", command="voltron update", block=False)
+    except:
+        log_alert("Failed to execute '%s' command" % cmd)
+
+
 def custom_request(request, args, alert=True):
     """ Allows external code to pass arbitrary commands to the voltron client
     request: type of request - usually 'command'
@@ -357,3 +422,7 @@ PluginCommand.register_for_address("Voltron: Breakpoint set", "", set_breakpoint
 PluginCommand.register_for_address("Voltron: Breakpoint clear", "", delete_breakpoint)
 PluginCommand.register_for_address("Voltron: Slide set", "", set_slide)
 PluginCommand.register("Voltron: Slide clear", "", clear_slide)
+PluginCommand.register("Voltron: Run", "", exec_run)
+PluginCommand.register("Voltron: Continue", "", exec_continue)
+PluginCommand.register("Voltron: Step into next instruction", "", exec_step_into)
+PluginCommand.register("Voltron: Step over next instruction", "", exec_step_over)
